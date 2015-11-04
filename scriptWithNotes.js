@@ -1,3 +1,6 @@
+/**
+ * Created by tangdru on 10/31/15.
+ */
 console.log("Assignment 4-B");
 
 var margin = {t:50,r:100,b:50,l:50};
@@ -28,53 +31,34 @@ var axisY = d3.svg.axis()
     .tickSize(width)
     .scale(scaleY);
 
-
+//Draw axes
 plot.append('g').attr('class','axis axis-x')
     .attr('transform','translate(0,'+height+')')
     .call(axisX);
 plot.append('g').attr('class','axis axis-y')
     .call(axisY);
 
-var lineGenerator = d3.svg.line()
-    .x(function(d){ return scaleX(d.year)})
-    .y(function(d){ return scaleY(d.value)})
-    .interpolate('basis');
-
-var areaGenerator = d3.svg.area()
-    .x(function(d){ return scaleX(d.year)})
-    .y0(height)
-    .y1(function(d){ return scaleY(d.value)})
-    .interpolate('basis');
-
-var areaGenerator =d3.svg.area()
-    .x(function(d){return scaleX(d.year)})
-    .y0(height)
-    .y1(function(d){return scaleY(d.value)})
-    .interpolate('basis');
-
-
+//Start importing data
 d3.csv('data/fao_combined_world_1963_2013.csv', parse, dataLoaded);
 
 function parse(d) {
-    return {
-        item: d.ItemName,
-        year: +d.Year,
-        value: +d.Value
-    };
-}
 
-function dataLoaded(error, data){
-    console.log(data);
 
-    var nestedData = d3.nest()
-        .key(function(d){return d.item})
-        .entries(data);
+//Eliminate records for which gdp per capita isn't available
 
-    console.log(nestedData);
+//Check "primary completion" and "urban population" columns
+//if figure is unavailable and denoted as "..", replace it with undefined
+//otherwise, parse the figure into numbers
+
+};
+
 
 
 }
 
+function dataLoaded(error, rows){
+    console.log(rows);
 
-//Do the easy stuff first
+
+}
 
