@@ -40,20 +40,12 @@ var lineGenerator = d3.svg.line()
     .y(function(d){ return scaleY(d.value)})
     .interpolate('basis');
 
-var areaGenerator = d3.svg.area()
-    .x(function(d){ return scaleX(d.year)})
-    .y0(height)
-    .y1(function(d){ return scaleY(d.value)})
-    .interpolate('basis');
+//load data
+queue()
+    .defer(d3.csv,'data/fao_combined_world_1963_2013.csv', parse)
+    .defer(d3.csv,'data/metadata.csv', parseMetadata)
+    .await(dataLoaded);
 
-var areaGenerator =d3.svg.area()
-    .x(function(d){return scaleX(d.year)})
-    .y0(height)
-    .y1(function(d){return scaleY(d.value)})
-    .interpolate('basis');
-
-
-d3.csv('data/fao_combined_world_1963_2013.csv', parse, dataLoaded);
 
 function parse(d) {
     return {
@@ -63,7 +55,15 @@ function parse(d) {
     };
 }
 
-function dataLoaded(error, data){
+function parseMetadata(d){
+
+}
+
+
+
+
+//time to draw
+function dataLoaded(error, data, metadata){
     console.log(data);
 
     var nestedData = d3.nest()
@@ -72,9 +72,50 @@ function dataLoaded(error, data){
 
     console.log(nestedData);
 
+    /*nestedData.forEach(function(t){
+        console.log(t.key);
+
+        t.item = t.key;
+        t.totalProd = function(t){
+            var total = 0;
+            t.values.forEach(function(each){total = total + each.value;
+
+            })
+            return total;
+        }
+        t.year = t.year;
+    })*/
+
+    plot.append('path')
+        .datum(nestedData[0].values)
+        .attr('class', 'tea-data-line data-line')
+        .attr('d', lineGenerator)
+
+    plot.selectAll('t')
+        .data(nestedData[0].values)
+        .enter()
+        .append('circle')
+        .attr('class', 'tea-data-point data-point')
+        .attr('r', 3)
+        .attr('cx', function(d){return scaleX(d.year);})
+        .attr('cy', function(d){return scaleY(d.value);})
+
+
+    plot.append('path')
+        .datum(nestedData[1].values)
+        .attr('class', 'coffee-data-point data-line')
+        .attr('d', lineGenerator)
+
+    plot.selectAll('t')
+        .data(nestedData[1].values)
+        .enter()
+        .append('circle')
+        .attr('class', 'coffee-data-point data-point')
+        .attr('r', 3)
+        .attr('cx', function(d){return scaleX(d.year);})
+        .attr('cy', function(d){return scaleY(d.value);})
+
 
 }
 
-
-//Do the easy stuff first
 
