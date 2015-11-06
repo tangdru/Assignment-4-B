@@ -97,7 +97,7 @@ function dataLoaded(error, data, metadata){
         .style("stroke-opacity", .0)
         .attr('cx', function(d){return scaleX(d.year);})
         .attr('cy', function(d){return scaleY(d.value);})
-        .call(Tooltip)
+        .call(attachTooltip)
 
 
     plot.append('path')
@@ -115,20 +115,19 @@ function dataLoaded(error, data, metadata){
         .style("stroke-opacity", .0)
         .attr('cx', function(d){return scaleX(d.year);})
         .attr('cy', function(d){return scaleY(d.value);})
-        .call(Tooltip)
+        .call(attachTooltip)
 }
 
 
-function Tooltip(selection){
+function attachTooltip(selection){
     selection
         .on('mouseenter',function(d){
+            console.log(d);
             var tooltip = d3.select('.custom-tooltip');
 
             tooltip
                 .transition()
                 .style('opacity',1);
-
-
             tooltip.select('#type').html(d.item);
             tooltip.select('#year').html(d.year);
             tooltip.select('#value').html(d.value);

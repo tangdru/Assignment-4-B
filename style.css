@@ -30,10 +30,11 @@ html,body{
 /*-----------tooltip-----------*/
 .canvas .custom-tooltip{
     position:absolute;
-    border:1px solid red;
+    border:1px solid black;
+    font-color: black;
     width:150px;
-    min-height:20px;
-    padding:0px 10px;
+    min-height:30px;
+    padding:0px 5px;
 }
 
 
@@ -56,6 +57,7 @@ p{ font-size: .9em;}
 }
 .axis .tick text{
     fill:rgb(80,80,80)
+    font-size: 8pt;
 }
 
 .data-point{
