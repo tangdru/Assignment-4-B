@@ -32,9 +32,10 @@ html,body{
     position:absolute;
     border:1px solid red;
     width:150px;
-    min-height:10px;
+    min-height:20px;
     padding:0px 10px;
 }
+
 
 /*------------font-------------*/
 body{
@@ -64,6 +65,7 @@ p{ font-size: .9em;}
 }
     .coffee-data-point{ stroke:red; }
     .tea-data-point{ stroke:rgb(0,200,255); }
+
 .data-line{
     fill:none;
     stroke-width:2px;
@@ -71,6 +73,7 @@ p{ font-size: .9em;}
 }
     .coffee-data-line{ stroke:red; }
     .tea-data-line{ stroke:rgb(0,200,255); }
+
 .data-area{
     fill-opacity:.05;
     fill:rgb(150,150,150);

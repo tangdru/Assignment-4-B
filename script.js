@@ -38,12 +38,12 @@ plot.append('g').attr('class','axis axis-y')
 var lineGenerator = d3.svg.line()
     .x(function(d){ return scaleX(d.year)})
     .y(function(d){ return scaleY(d.value)})
-    .interpolate('basis');
+    .interpolate('monotone')
+    ;
 
 //load data
 queue()
     .defer(d3.csv,'data/fao_combined_world_1963_2013.csv', parse)
-    .defer(d3.csv,'data/metadata.csv', parseMetadata)
     .await(dataLoaded);
 
 
@@ -53,10 +53,6 @@ function parse(d) {
         year: +d.Year,
         value: +d.Value
     };
-}
-
-function parseMetadata(d){
-
 }
 
 
@@ -96,9 +92,12 @@ function dataLoaded(error, data, metadata){
         .enter()
         .append('circle')
         .attr('class', 'tea-data-point data-point')
-        .attr('r', 3)
+        .attr('r', 8)
+        .style("fill-opacity", .0)
+        .style("stroke-opacity", .0)
         .attr('cx', function(d){return scaleX(d.year);})
         .attr('cy', function(d){return scaleY(d.value);})
+        .call(Tooltip)
 
 
     plot.append('path')
@@ -111,11 +110,41 @@ function dataLoaded(error, data, metadata){
         .enter()
         .append('circle')
         .attr('class', 'coffee-data-point data-point')
-        .attr('r', 3)
+        .attr('r', 8)
+        .style("fill-opacity", .0)
+        .style("stroke-opacity", .0)
         .attr('cx', function(d){return scaleX(d.year);})
         .attr('cy', function(d){return scaleY(d.value);})
-
-
+        .call(Tooltip)
 }
 
 
+function Tooltip(selection){
+    selection
+        .on('mouseenter',function(d){
+            var tooltip = d3.select('.custom-tooltip');
+
+            tooltip
+                .transition()
+                .style('opacity',1);
+
+
+            tooltip.select('#type').html(d.item);
+            tooltip.select('#year').html(d.year);
+            tooltip.select('#value').html(d.value);
+        })
+        .on('mousemove',function(){
+            var xy = d3.mouse(canvas.node());
+
+            var tooltip = d3.select('.custom-tooltip');
+
+            tooltip
+                .style('left',xy[0]+20+'px')
+                .style('top',(xy[1]+20)+'px');
+        })
+        .on('mouseleave',function(){
+            var tooltip = d3.select('.custom-tooltip')
+                .transition()
+                .style('opacity',0);
+        })
+}
